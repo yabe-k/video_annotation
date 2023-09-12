@@ -1,0 +1,376 @@
+<html>
+    <head>
+        <title>Video annotator</title>
+        <style type="text/css">
+            body{
+                margin: 0px;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            .wrapper{
+                height: 100%;
+                padding: 0px;
+                margin: 0px;
+            }
+            .video-wrapper{
+                background-color: black;
+                width: 100%;
+                padding: 0px;
+                text-align: center;
+                margin: 0px;
+                height: 90%;
+                color: white;
+            }
+            video{
+                height: 100%;
+                max-width: 100%;
+                margin: auto;
+            }
+            table{
+                width: 100%;
+                height: 10%;
+                background-color: #444444;
+                color: white;
+                overflow: scroll;
+            }
+            td{
+                text-align: center;
+            }
+            .control-btn{
+                width: 50px;
+                background-color: #333333;
+                cursor: pointer;
+            }
+            .control-btn:hover{
+                background-color: #555555;
+            }
+            .records{
+                background-color: #2f3438;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .records:hover{
+                background-color: #4a647c;
+            }
+            .undo-btn{
+                width: fit-content;
+                margin: auto;
+                padding-left: 11px;
+                padding-right: 11px;
+                height: 18px;
+                background-color: #333333;
+                border-radius: 9px;
+                font-size: 12px;
+                cursor: pointer;
+            }
+            .undo-btn:hover{
+                background-color: #555555;
+            }
+            .setting-skip-length{
+                background-color: #3b3b3b;
+            }
+            #seek_length{
+                width: 35px;
+                border: none;
+                border-radius: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+                background-color: #555555;
+                color: white;
+            }
+            .hidden{
+                display: none !important;
+            }
+            .results{
+                height: 40%;
+                vertical-align: top;
+                /*overflow: scroll;*/
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div id="drop-zone" class="video-wrapper" style="display: table;">
+                <div style="display: table-cell; vertical-align: middle;">Drag & drop a video file or <input type="file" name="file" id="file-input"></div>
+            </div>
+            <div id="video-wrapper" class="video-wrapper hidden">
+                <video id="video" src="./video.mp4" controls></video>
+            </div>
+            <table><tbody>
+                <tr>
+                    <td rowspan="2" class="control-btn" onclick="play_pause();">
+                        <!--Play/Pause<br/>-->
+                        <img width="35px" src="icon-play.png">
+                    </td>
+                    <td class="control-btn" onclick="back();">
+                        <img width="25px" src="icon-back.png">
+                    </td>
+                    <td class="control-btn" onclick="proceed();">
+                        <img width="25px" src="icon-proceed.png">
+                    </td>
+                    <td rowspan="2" width="15"></td>
+                    <td class="records" onclick="addNote();"  id="record_button_-1">
+                        <img width="30px" src="icon-note.png">
+                    </td>
+                    <td class="records" onclick="addRecord(1);" id="record_button_1">
+                        1
+                    </td>
+                    <td class="records" onclick="addRecord(2);" id="record_button_2">
+                        2
+                    </td>
+                    <td class="records" onclick="addRecord(3);" id="record_button_3">
+                        3
+                    </td>
+                    <td class="records" onclick="addRecord(4);" id="record_button_4">
+                        4
+                    </td>
+                    <td class="records" onclick="addRecord(5);" id="record_button_5">
+                        5
+                    </td>
+                    <td class="records" onclick="addRecord(6);" id="record_button_6">
+                        6
+                    </td>
+                    <td class="records" onclick="addRecord(7);" id="record_button_7">
+                        7
+                    </td>
+                    <td class="records" onclick="addRecord(8);" id="record_button_8">
+                        8
+                    </td>
+                    <td class="records" onclick="addRecord(9);" id="record_button_9">
+                        9
+                    </td>
+                    <td class="records" onclick="addRecord(0);" id="record_button_0">
+                        0
+                    </td>
+                    <td rowspan="2" width="15"></td>
+                    <td rowspan="2" class="control-btn" onclick="toggleResults();">
+                        <img src="icon-view-hide.png" width="30px">
+                    </td>
+                    <td rowspan="2" class="control-btn" onclick="save();" id="save_button">
+                        <img src="icon-export.png" width="30px">
+                    </td>
+                </tr>
+                <tr>
+                    <td  colspan="2" class="setting-skip-length">
+                        <input id="seek_length" type="tel" value="5"> seconds
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(-1);" id="remove_button_-1">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(1);" id="remove_button_1">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(2);" id="remove_button_2">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(3);" id="remove_button_3">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(4);" id="remove_button_4">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(5);" id="remove_button_5">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(6);" id="remove_button_6">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(7);" id="remove_button_7">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(8);" id="remove_button_8">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(9);" id="remove_button_9">Undo</div>
+                    </td>
+                    <td>
+                        <div class="undo-btn" onclick="removeRecord(0);" id="remove_button_0">Undo</div>
+                    </td>
+                </tr>
+                <tr id="results" class="hidden" style="font-size: 1em;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td id="result_-1" class="results"></td>
+                    <td id="result_1" class="results"></td>
+                    <td id="result_2" class="results"></td>
+                    <td id="result_3" class="results"></td>
+                    <td id="result_4" class="results"></td>
+                    <td id="result_5" class="results"></td>
+                    <td id="result_6" class="results"></td>
+                    <td id="result_7" class="results"></td>
+                    <td id="result_8" class="results"></td>
+                    <td id="result_9" class="results"></td>
+                    <td id="result_0" class="results"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody></table>
+        </div>
+        <script type="text/javascript">
+            
+            function toggleResults(){
+                document.getElementById("results").classList.toggle("hidden");
+            }
+            function play_pause(){
+                var v = document.getElementById("video");
+                v.blur();
+                if(v.paused){
+                    v.play();
+                }else{
+                    v.pause();
+                }
+            }
+            function proceed(){
+                var v = document.getElementById("video");
+                var current = v.currentTime;
+                var duration = Number(document.getElementById("seek_length").value);
+                v.currentTime = current + duration;
+            }
+            function back(){
+                var v = document.getElementById("video");
+                var current = v.currentTime;
+                var duration = Number(document.getElementById("seek_length").value);
+                v.currentTime = current - duration;
+            }
+            function save(){
+                var fileInput = document.getElementById("file-input");
+                save_name = String(fileInput.files[0].name) + "_annotations.csv";
+                //alert(save_name);
+                output = "time(sec), event\n"
+                for (let i = -1; i<10 ;i++){
+                    var td = document.getElementById("result_" + String(i));
+                    var divs = td.getElementsByTagName("div");
+                    for (const element of divs){
+                        output = output + element.textContent + "\n";
+                    }
+                }
+                const blob = new Blob([output], {type:"text/plain"});
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(blob);
+                link.download = save_name;
+                link.click();
+            }
+            function addRecord(num, comment=""){
+                v = document.getElementById("video");
+                if (document.getElementById("video-wrapper").classList.contains("hidden")){
+                    return;
+                }
+                blink(num);
+                if (comment == ""){
+                    comment = String(num);
+                }
+                var target = document.getElementById("result_" + String(num));
+                var child = document.createElement("div");
+                child.innerText = String(v.currentTime) + ", " + comment;
+                target.prepend(child);
+            }
+
+            function addNote(){
+                blink(-1);
+                v = document.getElementById("video")
+                v.pause();
+                note = window.prompt("Input note.");
+                if(note == ""){
+                    window.alert("Cancelled.");
+                }else if(note == null){
+                    window.alert("Cancelled.");
+                }else{
+                    addRecord(-1, note);
+                    console.log(note);
+                }
+            }
+
+            function removeRecord(num){
+                target = document.getElementById("result_" + String(num));
+                target_div = target.getElementsByTagName("div")[0];
+                if (target_div === undefined){
+                }else{
+                    target_div.remove();
+                }
+            }
+
+            document.addEventListener("keydown", keydown_event);
+            function keydown_event(e){
+                if(e.ctrlKey){
+                    if(!isNaN(e.key)){
+                        event.preventDefault();
+                        if(document.getElementById("seek_length") === document.activeElement){
+                            
+                        }else{
+                            document.getElementById("remove_button_" + String(e.key)).click();
+                        }
+
+                    }else if(e.code === "Enter"){
+                        event.preventDefault();
+                        document.getElementById("remove_button_-1").click();
+                    }else if(e.code === "KeyS"){
+                        event.preventDefault();
+                        document.getElementById("save_button").click();
+                    }
+                }else{
+                    if(e.code === "Space"){
+                        event.preventDefault();
+                        play_pause();
+                    }else if(e.code === "ArrowLeft"){
+                        back();
+                    }else if(e.code === "ArrowRight"){
+                        proceed();
+                    }else if(!isNaN(e.key)){
+                        if(document.getElementById("seek_length") === document.activeElement){
+                            
+                        }else{
+                            document.getElementById("record_button_" + String(e.key)).click();
+                        }
+
+                    }else if(e.code === "Enter"){
+                        event.preventDefault();
+                        document.getElementById("record_button_-1").click();
+                    }
+                }  
+            }
+
+            function blink(num){
+                document.getElementById("record_button_" + String(num)).animate({
+                    background: ["#dddddd", "#2f3438"],
+                }, 500);
+            }
+
+            function setVideo(file){
+                if(!file.type.match("video.*")) {
+                    return alert("It seems that this is not a video file.")
+                }
+                var v = document.getElementById("video");
+                v.src = window.URL.createObjectURL(file);
+                v.load();
+                document.getElementById("drop-zone").classList.toggle("hidden");
+                document.getElementById("video-wrapper").classList.toggle("hidden");
+                document.getElementById("drop-zone").style.display = "none";
+            }
+
+            var dropZone = document.getElementById("drop-zone");
+            var fileInput = document.getElementById("file-input");
+            dropZone.addEventListener("dragover", function(e){
+                e.stopPropagation();
+                e.preventDefault();
+                this.style.background = 'darkgray';
+            }, false);
+            dropZone.addEventListener('dragleave', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.style.background = 'black';
+            }, false);
+            dropZone.addEventListener('drop', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                this.style.background = 'black'; //背景色を白に戻す
+                var files = e.dataTransfer.files; //ドロップしたファイルを取得
+                if (files.length > 1) return alert('Only one file can be loaded');
+                fileInput.files = files; //inputのvalueをドラッグしたファイルに置き換える。
+                setVideo(files[0]);
+            }, false);
+        </script>
+    </body>
+</html>
