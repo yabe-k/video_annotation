@@ -70,12 +70,15 @@
             }
             #seek_length{
                 width: 35px;
+            }
+            .num-input{
+                width: 35px;
                 border: none;
                 border-radius: 10px;
                 padding-left: 10px;
                 padding-right: 10px;
                 background-color: #555555;
-                color: white;
+                color: white; 
             }
             .hidden{
                 display: none !important;
@@ -97,7 +100,7 @@
             </div>
             <table><tbody>
                 <tr>
-                    <td rowspan="2" class="control-btn" onclick="play_pause();">
+                    <td rowspan="1" class="control-btn" onclick="play_pause();">
                         <!--Play/Pause<br/>-->
                         <img width="35px" src="icon-play.png">
                     </td>
@@ -150,8 +153,11 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>
+                        speed<input id="speed" class="num-input" type="tel" value="1">
+                    </td>
                     <td  colspan="2" class="setting-skip-length">
-                        <input id="seek_length" type="tel" value="5"> seconds
+                        <input id="seek_length" type="tel" value="5" class="num-input"> seconds
                     </td>
                     <td>
                         <div class="undo-btn" onclick="removeRecord(-1);" id="remove_button_-1">Undo</div>
@@ -299,6 +305,8 @@
                         event.preventDefault();
                         if(document.getElementById("seek_length") === document.activeElement){
                             
+                        }else if(document.getElementById("speed") === document.activeElement){
+
                         }else{
                             document.getElementById("remove_button_" + String(e.key)).click();
                         }
@@ -321,6 +329,8 @@
                     }else if(!isNaN(e.key)){
                         if(document.getElementById("seek_length") === document.activeElement){
                             
+                        }else if(document.getElementById("speed") === document.activeElement){
+
                         }else{
                             document.getElementById("record_button_" + String(e.key)).click();
                         }
@@ -371,6 +381,12 @@
                 fileInput.files = files; //inputのvalueをドラッグしたファイルに置き換える。
                 setVideo(files[0]);
             }, false);
+            
+            var speedInput = document.getElementById("speed");
+            speedInput.addEventListener("change", (e) => {
+                var v = document.getElementById("video");
+                v.playbackRate = speedInput.value;
+            });
         </script>
     </body>
 </html>
